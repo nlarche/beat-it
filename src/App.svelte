@@ -1,9 +1,11 @@
 <script>
   import BeatByMeasure from './BeatByMesure.svelte'; 
+  import Starred from './Starred.svelte'; 
   import { sound } from './sound';
   import { metronome } from './metronome';
   import { tweened } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
+  import { starred as starredStore } from './store/starred';
 
   const MINUTE = 60;
   const MINUTE_TO_SECONDS = 1000;
@@ -67,6 +69,15 @@ const progress = tweened(0, {
 		stop();
   }
 
+  const handleStared = () => {
+	  starredStore.add({ tempo, division });
+  }
+
+  const handleSelectStarred = (event) =>{
+	  tempo = event.detail.data.tempo;
+	  division = event.detail.data.division;
+  }
+
 </script>
 
 <main>
@@ -77,7 +88,9 @@ const progress = tweened(0, {
   <div>
   	<button on:click={handleStop}>stop</button>
   	<button on:click={hanldePlay}>play</button>
+	<button on:click={handleStared}>⭐️</button>
   </div>
+  <Starred on:select={handleSelectStarred}></Starred>
 </main>
 
 <style>
